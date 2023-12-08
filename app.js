@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(helmet());
 app.disable('x-powered-by')
 
-app.get("/source-config/v1/read",ResponseHandler.setAPIInfo("api.source-config.read", "1.0"), SourceConfig)
+app.get("/config/v1/read",ResponseHandler.setAPIInfo("api.source-config.read", "1.0"), SourceConfig)
 app.get("/content/v1/search",ResponseHandler.setAPIInfo("api.content.search"), ContentSearch)
 app.listen(process.env.PORT, (err) => {
     if(err) {
