@@ -4,8 +4,6 @@ const sourceConfigUrl = process.env.SOURCE_CONFIG_URL
 const metadataMappingUrl = process.env.META_DATA_MAPPING
 const SourceConfig = async (req, res) => {
 
-    //
-
     return ResponseHandler.success(req, res, {
         sourceConfig: {
             "configVersion": 1.0,

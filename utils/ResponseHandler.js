@@ -20,8 +20,19 @@ const ResponseHandler = {
             "responseCode": httpStatus[statusCode],
             "result": data
         })
+    },
+    error: (req, res, data, statusCode = httpStatus.INTERNAL_SERVER_ERROR) => {
+        res.status(statusCode).send({
+            "id": req?.id || "api",
+            "params":
+            {
+                resmsgid: uuidv4(),
+                msgid: req?.body?.params?.msgid || uuidv4()
+            },
+            "responseCode": httpStatus[statusCode],
+            "result": data
+        })
     }
-
 }
 
 module.exports = { ResponseHandler }
