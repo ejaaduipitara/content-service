@@ -12,6 +12,8 @@ const tableName = 'content'
 
 const localContents = async (req, res) => {
 
+    let finalResult = []
+
     if(req?.query){
         let keywordArray = req?.query;
         if(!_.isArray(req?.query)){
@@ -21,7 +23,8 @@ const localContents = async (req, res) => {
         const values = keywordArray;
         try{
             const result = await pool.query(queryString, values);
-            return result.rows;
+            finalResult = _.concat(finalResult, result.rows)
+            // return result.rows;
         }catch(err){
             console.error('Error:', err.message);
             throw ({
@@ -29,7 +32,63 @@ const localContents = async (req, res) => {
             })
         }      
     }
+
+    if(req?.filters){
+        console.log("req?.filters ", req?.filters)
+        const queryString = findBasedOnFilters(req?.filters)
+        try{
+            const result = await pool.query(queryString);
+            finalResult = _.concat(finalResult, result.rows)
+            // return result.rows;
+        }catch(err){
+            console.error('Error:', err.message);
+            throw ({
+                "message": "Error"
+            })
+        }
+    }
+    
+    return _.uniqBy(finalResult, "identifier");
+
 }
+
+const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
+    const columns = Object.keys(conditions);
+    const values = Object.values(conditions);
+
+    const whereClause = columns
+        .map((column, i) => {
+            if (_.isString(values[i]) && _.includes(values[i], '%')) {
+                return `${column} ILIKE $${i + 1}`;
+            } else if (_.isArray(values[i]) && !_.isEmpty(jsonbType) && !_.isEqual(_.indexOf(jsonbType, column), -1)) {
+                if (_.isString(values[i][0])) {
+                    return `${column} ?| $${i + 1}`;
+                }
+
+                return `${column} @> $${i + 1}`;
+            } else if (_.isObject(values[i]) && !_.isEmpty(jsonbType) && !_.isEqual(_.indexOf(jsonbType, column), -1)) {
+                if (_.isString(values[i][0])) {
+                    return `${column} ?| $${i + 1}`;
+                }
+
+                return `${column} @> $${i + 1}`;
+            } else if (_.isArray(values[i]) && !_.isEmpty(arrayType) && !_.isEqual(_.indexOf(arrayType, column), -1)) {
+                return `${column} && $${i + 1}`;
+            } else if (_.isObject(values[i]) && _.isArray(values[i])) {
+                return `${column} = ANY($${i + 1})`;
+            } else {
+                return `${column}=$${i + 1}`;
+            }
+        })
+        .join(' AND ');
+
+    const query = {
+        text: `SELECT * FROM ${tableName} WHERE ${whereClause}`,
+        values: [...values],
+    };
+    
+    return query;
+};
 
 const prepareQuery = (keywordArray) => {
     const query = `
