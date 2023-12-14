@@ -3,7 +3,7 @@ const { ResponseHandler } = require('../utils/ResponseHandler');
 
 const PageSearch = (req, res) => {
 
-    if(!req.headers['x-device-id']){
+    if(!req.get('x-device-id')){
         return ResponseHandler.error(req, res, {
             err: "ERR_BAD_REQUEST",
             errmsg: "x-device-id is requird in headers"
