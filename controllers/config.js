@@ -10,7 +10,6 @@ const Config = async (req, res) => {
     try {
          const cacheConfig = await keyv.get('config')
          if(cacheConfig) {
-            console.log(`From cache`)
             config = JSON.parse(cacheConfig)
          } else {
             const response = await axios.get(configUrl)
