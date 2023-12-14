@@ -99,7 +99,7 @@ const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
         .join(' AND ');
 
     const query = {
-        text: `SELECT * FROM ${tableName} WHERE ${whereClause}`,
+        text: `SELECT * FROM ${tableName} WHERE ${whereClause} AND status='Live'`,
         values: [...values],
     };
     
@@ -124,12 +124,16 @@ const prepareQuery = (keywordArray) => {
                     url ILIKE k || '%'  OR
                     domain ILIKE k || '%'  OR
                     curricularGoal ILIKE k || '%'  OR
-                    category ILIKE k || '%'
+                    category ILIKE k || '%' OR
+                    array_to_string(audience, ' ') ILIKE k || '%' OR
+                    array_to_string(keywords, ' ') ILIKE k || '%' OR
+                    array_to_string(competencies, ' ') ILIKE k || '%' OR
+                    status::text ILIKE 'Live' || '%'
                 )`;
                 }).join(' OR ')}
             `;
     } else {
-        query = `SELECT * FROM ${tableName}`
+        query = `SELECT * FROM ${tableName} WHERE status='Live'`
     }
     return query;
 }
