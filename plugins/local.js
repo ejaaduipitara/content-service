@@ -14,6 +14,7 @@ const localContents = async (req, res) => {
 
     let finalResult = []
 
+    // If the request includes query String/ List
     if(req?.query){
         let keywordArray = req?.query;
         if(!_.isArray(req?.query)){
@@ -33,13 +34,28 @@ const localContents = async (req, res) => {
         }      
     }
 
+    // If the request includes filters
     if(req?.filters){
         console.log("req?.filters ", req?.filters)
         const queryString = findBasedOnFilters(req?.filters)
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
-            // return result.rows;
+        }catch(err){
+            console.error('Error:', err.message);
+            throw ({
+                "message": "Error"
+            })
+        }
+    }
+
+    // If the request does not include either a query or filters
+    if(!req?.query && !req?.filters){
+        console.log("NO query & filters")
+        const queryString = prepareQuery()
+        try{
+            const result = await pool.query(queryString);
+            finalResult = _.concat(finalResult, result.rows)
         }catch(err){
             console.error('Error:', err.message);
             throw ({
@@ -91,26 +107,30 @@ const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
 };
 
 const prepareQuery = (keywordArray) => {
-    const query = `
-      SELECT * FROM ${tableName}
-      WHERE
-        ${keywordArray.map((keyword, index) => {
-          return `EXISTS (
-            SELECT 1
-            FROM regexp_split_to_table($${index + 1}, ' ') AS k
+    let query;
+    if(!_.isUndefined(keywordArray)){
+        query = `SELECT * FROM ${tableName}
             WHERE
-            name ILIKE k || '%' OR
-            thumbnail ILIKE k || '%'  OR
-            description ILIKE k || '%' OR
-            mimeType ILIKE k || '%'  OR
-            url ILIKE k || '%'  OR
-            domain ILIKE k || '%'  OR
-            curricularGoal ILIKE k || '%'  OR
-            category ILIKE k || '%'
-          )`;
-        }).join(' OR ')}
-    `;
-
+                ${keywordArray.map((keyword, index) => {
+                return `EXISTS (
+                    SELECT 1
+                    FROM regexp_split_to_table($${index + 1}, ' ') AS k
+                    WHERE
+                    identifier ILIKE k || '%' OR
+                    name ILIKE k || '%' OR
+                    thumbnail ILIKE k || '%'  OR
+                    description ILIKE k || '%' OR
+                    mimeType ILIKE k || '%'  OR
+                    url ILIKE k || '%'  OR
+                    domain ILIKE k || '%'  OR
+                    curricularGoal ILIKE k || '%'  OR
+                    category ILIKE k || '%'
+                )`;
+                }).join(' OR ')}
+            `;
+    } else {
+        query = `SELECT * FROM ${tableName}`
+    }
     return query;
 }
 

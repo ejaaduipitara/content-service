@@ -18,7 +18,7 @@ app.disable('x-powered-by')
 
 app.get("/v1/config/read",ResponseHandler.setAPIInfo("api.djp.config.read", "1.0"), Config)
 app.post("/v1/content/search",ResponseHandler.setAPIInfo("api.djp.content.search", "1.0"), ContentSearch)
-app.post("/v1/page/search",ResponseHandler.setAPIInfo("api.djp.content.search", "1.0"), PageSearch)
+app.post("/v1/page/search",ResponseHandler.setAPIInfo("api.djp.page.search", "1.0"), PageSearch)
 app.get("/v1/health",ResponseHandler.setAPIInfo("api.djp.health", "1.0"), Contenthealth)
 app.listen(process.env.PORT, (err) => {
     if(err) {
