@@ -17,6 +17,7 @@
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "http-status": "^1.7.3",
+    "keyv": "^4.5.4",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "node-cache": "^5.1.2",
