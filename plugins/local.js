@@ -10,16 +10,23 @@ const pool = new Pool({
     port: process.env.POSTGRES_PORT,
 });
 const tableName = 'content'
+const status = 'Live';
 
 const localContents = async (req, res) => {
 
     let finalResult = []
 
     // If the request includes query String/ List
-    if(req?.query){
-        let keywordArray = req?.query;
-        if(!_.isArray(req?.query)){
-            keywordArray = [req?.query]
+    const query =  req?.query;
+    if(query){
+        let keywordArray = query;
+        if(_.isObject(query)){
+            keywordArray= _.flatten(_.values(query))
+            if(_.isString(keywordArray)){
+                keywordArray = [keywordArray]
+            }
+        } else if(_.isString(query)){
+            keywordArray = [query]
         }
         const queryString = prepareQuery(keywordArray)
         const values = keywordArray;
@@ -27,7 +34,6 @@ const localContents = async (req, res) => {
             const result = await pool.query(queryString, values);
             finalResult = _.concat(finalResult, result.rows)
             logger.info(`contents using query: ${JSON.stringify(finalResult)}`);
-            // return result.rows;
         }catch(err){
             logger.error(`Error while fetching contents using query: ${err}`);
             throw ({
@@ -37,9 +43,9 @@ const localContents = async (req, res) => {
     }
 
     // If the request includes filters
-    if(req?.filters){
-        logger.info("req?.filters ", req?.filters)
-        const queryString = findBasedOnFilters(req?.filters)
+    const filters = req?.filters;
+    if(filters){
+        const queryString = findBasedOnFilters(filters)
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
@@ -53,7 +59,7 @@ const localContents = async (req, res) => {
     }
 
     // If the request does not include either a query or filters
-    if(!req?.query && !req?.filters){
+    if(!query && !filters){
         const queryString = prepareQuery()
         try{
             const result = await pool.query(queryString);
@@ -102,7 +108,7 @@ const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
         .join(' AND ');
 
     const query = {
-        text: `SELECT * FROM ${tableName} WHERE ${whereClause} AND status='Live'`,
+        text: `SELECT * FROM ${tableName} WHERE ${whereClause} AND status='${status}'`,
         values: [...values],
     };
     
@@ -113,7 +119,7 @@ const prepareQuery = (keywordArray) => {
     let query;
     if(!_.isUndefined(keywordArray)){
         query = `SELECT * FROM ${tableName}
-            WHERE
+            WHERE status = '${status}' AND (
                 ${keywordArray.map((keyword, index) => {
                 return `EXISTS (
                     SELECT 1
@@ -130,13 +136,12 @@ const prepareQuery = (keywordArray) => {
                     category ILIKE k || '%' OR
                     array_to_string(audience, ' ') ILIKE k || '%' OR
                     array_to_string(keywords, ' ') ILIKE k || '%' OR
-                    array_to_string(competencies, ' ') ILIKE k || '%' OR
-                    status::text ILIKE 'Live' || '%'
+                    array_to_string(competencies, ' ') ILIKE k || '%'
                 )`;
                 }).join(' OR ')}
-            `;
+            )`;
     } else {
-        query = `SELECT * FROM ${tableName} WHERE status='Live'`
+        query = `SELECT * FROM ${tableName} WHERE status='${status}'`
     }
     return query;
 }
