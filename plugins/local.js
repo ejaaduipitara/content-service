@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const _ = require('lodash')
+const { logger } = require('../utils/logger');
 
 const pool = new Pool({
     user: process.env.POSTGRES_USERNAME,
@@ -25,11 +26,12 @@ const localContents = async (req, res) => {
         try{
             const result = await pool.query(queryString, values);
             finalResult = _.concat(finalResult, result.rows)
+            logger.info(`contents using query: ${JSON.stringify(finalResult)}`);
             // return result.rows;
         }catch(err){
-            console.error('Error:', err.message);
+            logger.error(`Error while fetching contents using query: ${err}`);
             throw ({
-                "message": "Error"
+                "message": "Error while fetching contents using query"
             })
         }      
     }
@@ -41,25 +43,26 @@ const localContents = async (req, res) => {
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
+            logger.info(`contents using filters: ${JSON.stringify(finalResult)}`);
         }catch(err){
-            console.error('Error:', err.message);
+            logger.error(`Error while fetching contents using filters: ${err}`);
             throw ({
-                "message": "Error"
+                "message": "Error while fetching contents using filters"
             })
         }
     }
 
     // If the request does not include either a query or filters
     if(!req?.query && !req?.filters){
-        console.log("NO query & filters")
         const queryString = prepareQuery()
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
+            logger.info(`contents without query & filters: ${JSON.stringify(finalResult)}`);
         }catch(err){
-            console.error('Error:', err.message);
+            logger.error(`Error while fetching contents without query & filters: ${err}`);
             throw ({
-                "message": "Error"
+                "message": "Error while fetching contents without query & filters"
             })
         }
     }
@@ -143,12 +146,12 @@ const health = async (req, res) => {
     let pgClient
     try {
         pgClient  = await pool.connect();
-        console.log('Connected to the database successfully!');
+        logger.info(`Connected to the database successfully!`);
         return {
             "message":"true"
         }
     } catch (error) {
-        console.error('Error connecting to the database:', error.message);
+        logger.error(`'Error connecting to the database:', ${error.message}`);
         throw ({
             "message": "Error connecting to database"
         })

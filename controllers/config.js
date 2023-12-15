@@ -1,6 +1,7 @@
 const { ResponseHandler } = require("../utils/ResponseHandler");
 const axios =   require("axios");
 const Keyv = require('keyv');
+const { logger } = require('../utils/logger');
 
 const configUrl = process.env.CONFIG_URL
 const configCacheTTL = process.env.CONFIG_CACHE_TTL || '1'
@@ -15,10 +16,10 @@ const Config = async (req, res) => {
             const response = await axios.get(configUrl)
             config = response?.data
             await keyv.set('config', JSON.stringify(config), parseInt(configCacheTTL) * 36000);
-            console.log(`setting cache`)
+            logger.info(`setting cache`);
          }
     } catch (error) {
-        console.log(`error while fetching config from cache or blob`, error)
+        logger.error(`error while fetching config from cache or blob: ${JSON.stringify(error)}`);
     }
 
     return ResponseHandler.success(req, res, config)
