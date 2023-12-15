@@ -11,6 +11,7 @@ const Config = async (req, res) => {
     try {
          const cacheConfig = await keyv.get('config')
          if(cacheConfig) {
+            logger.info(`getting from cache`);
             config = JSON.parse(cacheConfig)
          } else {
             const response = await axios.get(configUrl)
@@ -19,7 +20,7 @@ const Config = async (req, res) => {
             logger.info(`setting cache`);
          }
     } catch (error) {
-        logger.error(`error while fetching config from cache or blob: ${JSON.stringify(error)}`);
+        logger.error(`error while fetching config from cache or blob:`, error);
     }
 
     return ResponseHandler.success(req, res, config)

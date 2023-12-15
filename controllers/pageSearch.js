@@ -3,17 +3,17 @@ const { ResponseHandler } = require('../utils/ResponseHandler');
 const { logger } = require('../utils/logger')
 
 const PageSearch = (req, res) => {
-
-    if(!req.get('x-device-id')){
-        logger.warn('PageSearch: x-device-id is requird in headers');
+    const deviceId =  req.get('x-device-id')
+    if(!deviceId){
+        logger.warn('PageSearch: x-device-id is requird in headers deviceId: ', deviceId);
         return ResponseHandler.error(req, res, {
             err: "ERR_BAD_REQUEST",
             errmsg: "x-device-id is requird in headers"
         }, 400);
     }
-
-    if(!req.body?.request?.pageId){
-        logger.warn('PageSearch: pageId is requird');
+    const pageId = req.body?.request?.pageId
+    if(!pageId){
+        logger.warn('PageSearch: pageId is requird', pageId);
         return ResponseHandler.error(req, res, {
             err: "ERR_BAD_REQUEST",
             errmsg: "pageId is requird"

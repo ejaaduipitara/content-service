@@ -38,7 +38,7 @@ const localContents = async (req, res) => {
 
     // If the request includes filters
     if(req?.filters){
-        console.log("req?.filters ", req?.filters)
+        logger.info("req?.filters ", req?.filters)
         const queryString = findBasedOnFilters(req?.filters)
         try{
             const result = await pool.query(queryString);

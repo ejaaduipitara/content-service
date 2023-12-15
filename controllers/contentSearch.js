@@ -4,9 +4,9 @@ const { health, localContents } = require('../plugins/local');
 const { logger } = require('../utils/logger');
 
 const ContentSearch = (req, res) => {
-
-    if(!req.get('x-device-id')){
-        logger.warn('x-device-id is requird in headers');
+    const deviceId =  req.get('x-device-id')
+    if(!deviceId){
+        logger.warn('x-device-id is requird in headers', deviceId);
         ResponseHandler.error(req, res, {
             err: "ERR_BAD_REQUEST",
             errmsg: "x-device-id is requird in headers"
@@ -14,10 +14,10 @@ const ContentSearch = (req, res) => {
     }
 
     localContents(req.body?.request, res).then((result) => {
-        logger.info(`local contents successfully: ${JSON.stringify(result)}`);
+        logger.info(`local contents successfully: `, result);
         ResponseHandler.success(req, res, result)
     }).catch(error => {
-        logger.error(`Error while getting contents: ${JSON.stringify(error)}`);
+        logger.error(`Error while getting contents: `, error);
         ResponseHandler.error(req, res, { errmsg: error.message})
     });
     
@@ -25,10 +25,10 @@ const ContentSearch = (req, res) => {
 
 const Contenthealth = (req, res) => {
     health(req, res).then((result) => {
-        logger.info(`result: ${JSON.stringify(result)}`);
+        logger.info(`result: `, result);
         ResponseHandler.success(req, res, result)
     }).catch(error => {
-        logger.error(`Error while helth check: ${JSON.stringify(error)}`);
+        logger.error(`Error while helth check: `, error);
         ResponseHandler.error(req, res, { errmsg: error.message})
     })
 }
