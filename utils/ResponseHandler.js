@@ -6,7 +6,6 @@ const ResponseHandler = {
     setAPIInfo: (id, ver) => (req, res, next) => {
         req.id = id;
         req.ver = ver;
-        console.log(`body`, req?.body?.params?.msgid)
         next();
     },
     success: (req, res, data, statusCode = httpStatus.OK) => {
