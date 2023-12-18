@@ -21,7 +21,7 @@ const localContents = async (req, res) => {
     if(query){
         let keywordArray = query;
         if(_.isObject(query)){
-            keywordArray= _.flatten(_.values(query))
+            keywordArray= _.uniq(_.flatten(_.values(query)))
             if(_.isString(keywordArray)){
                 keywordArray = [keywordArray]
             }
@@ -125,18 +125,18 @@ const prepareQuery = (keywordArray) => {
                     SELECT 1
                     FROM regexp_split_to_table($${index + 1}, ' ') AS k
                     WHERE
-                    identifier ILIKE k || '%' OR
-                    name ILIKE k || '%' OR
-                    thumbnail ILIKE k || '%'  OR
-                    description ILIKE k || '%' OR
-                    mimeType ILIKE k || '%'  OR
-                    url ILIKE k || '%'  OR
-                    domain ILIKE k || '%'  OR
-                    curricularGoal ILIKE k || '%'  OR
-                    category ILIKE k || '%' OR
-                    array_to_string(audience, ' ') ILIKE k || '%' OR
-                    array_to_string(keywords, ' ') ILIKE k || '%' OR
-                    array_to_string(competencies, ' ') ILIKE k || '%'
+                    identifier ILIKE '%%' || k || '%%' OR
+                    name ILIKE '%%' || k || '%%' OR
+                    thumbnail ILIKE '%%' || k || '%%'  OR
+                    description ILIKE '%%' || k || '%%' OR
+                    mimeType ILIKE '%%' || k || '%%' OR
+                    url ILIKE '%%' || k || '%%'  OR
+                    domain ILIKE '%%' || k || '%%'  OR
+                    curricularGoal ILIKE '%%' || k || '%%' OR
+                    category ILIKE '%%' || k || '%%' OR
+                    array_to_string(audience, ' ') ILIKE '%%' || k || '%%' OR
+                    array_to_string(keywords, ' ') ILIKE '%%' || k || '%%' OR
+                    array_to_string(competencies, ' ') ILIKE '%%' || k || '%%'
                 )`;
                 }).join(' OR ')}
             )`;
