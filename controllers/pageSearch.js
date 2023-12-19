@@ -20,7 +20,7 @@ const PageSearch = (req, res) => {
         }, 400);
     }
 
-    localContents(req.body?.request, res).then((result) => {
+    localContents(req, res).then((result) => {
         ResponseHandler.success(req, res, result)
     }).catch(error => {
         ResponseHandler.error(req, res, { errmsg: error.message})

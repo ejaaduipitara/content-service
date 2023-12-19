@@ -11,13 +11,15 @@ const pool = new Pool({
 });
 const tableName = 'content'
 const status = 'Live';
+let userPrefLang = 'Hindi';
 
 const localContents = async (req, res) => {
 
     let finalResult = []
 
+    userPrefLang =  !_.isUndefined(req.get('x-preferred-language')) ?  req.get('x-preferred-language') : userPrefLang;
     // If the request includes query String/ List
-    const query =  req?.query;
+    const query =  req.body?.request?.query;
     if(query){
         let keywordArray = query;
         if(_.isObject(query)){
@@ -33,7 +35,7 @@ const localContents = async (req, res) => {
         try{
             const result = await pool.query(queryString, values);
             finalResult = _.concat(finalResult, result.rows)
-            logger.info(`contents using query: ${JSON.stringify(finalResult)}`);
+            logger.info(`Number of contents retrieved through query: ${Object.values(finalResult).length}`);
         }catch(err){
             logger.error(`Error while fetching contents using query: ${err}`);
             throw ({
@@ -43,13 +45,13 @@ const localContents = async (req, res) => {
     }
 
     // If the request includes filters
-    const filters = req?.filters;
+    const filters = req.body?.request?.filters;
     if(filters){
         const queryString = findBasedOnFilters(filters)
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
-            logger.info(`contents using filters: ${JSON.stringify(finalResult)}`);
+            logger.info(`Number of contents retrieved through filters: ${Object.values(finalResult).length}`);
         }catch(err){
             logger.error(`Error while fetching contents using filters: ${err}`);
             throw ({
@@ -64,7 +66,7 @@ const localContents = async (req, res) => {
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
-            logger.info(`contents without query & filters: ${JSON.stringify(finalResult)}`);
+            logger.info(`Number of contents retrieved through query & filters: ${Object.values(finalResult).length}`);
         }catch(err){
             logger.error(`Error while fetching contents without query & filters: ${err}`);
             throw ({
@@ -108,7 +110,12 @@ const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
         .join(' AND ');
 
     const query = {
-        text: `SELECT * FROM ${tableName} WHERE ${whereClause} AND status='${status}'`,
+        text: `SELECT * FROM ${tableName} WHERE ${whereClause} AND status='${status}' ORDER BY
+            CASE
+                WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
+                WHEN LOWER(language::text) = LOWER('English') THEN 3
+                ELSE 1
+            END DESC;`,
         values: [...values],
     };
     
@@ -132,6 +139,7 @@ const prepareQuery = (keywordArray) => {
                     mimeType ILIKE '%%' || k || '%%' OR
                     url ILIKE '%%' || k || '%%'  OR
                     domain ILIKE '%%' || k || '%%'  OR
+                    language::text ILIKE '%%' || k || '%%'  OR
                     curricularGoal ILIKE '%%' || k || '%%' OR
                     category ILIKE '%%' || k || '%%' OR
                     array_to_string(audience, ' ') ILIKE '%%' || k || '%%' OR
@@ -139,9 +147,21 @@ const prepareQuery = (keywordArray) => {
                     array_to_string(competencies, ' ') ILIKE '%%' || k || '%%'
                 )`;
                 }).join(' OR ')}
-            )`;
+            )
+            ORDER BY
+                CASE
+                    WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
+                    WHEN LOWER(language::text) = LOWER('English') THEN 3
+                    ELSE 1
+                END DESC;`;
     } else {
-        query = `SELECT * FROM ${tableName} WHERE status='${status}'`
+        query = `SELECT * FROM ${tableName} WHERE status='${status}' 
+        ORDER BY
+            CASE
+                WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
+                WHEN LOWER(language::text) = LOWER('English') THEN 3
+                ELSE 1
+            END DESC;`
     }
     return query;
 }
