@@ -9,7 +9,7 @@ const pool = new Pool({
     password: process.env.POSTGRES_PASSWORD,
     port: process.env.POSTGRES_PORT,
 });
-const tableName = 'content'
+const tableName = 'djp_contents'
 const status = 'Live';
 let userPrefLang = 'Hindi';
 
