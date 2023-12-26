@@ -11,13 +11,25 @@ const pool = new Pool({
 });
 const tableName = 'djp_contents'
 const status = 'Live';
+let userPrefLangCode = 'hi';
 let userPrefLang = 'Hindi';
+let langCodeMapping = {
+    "hi": "Hindi",
+    "en": "English",
+    "te": "Telugu",
+    "or": "Odia",
+    "ta": "Tamil",
+    "as": "Assamese",
+    "pa": "Punjabi",
+    "ml": "Malayalam"
+}
 
 const localContents = async (req, res) => {
 
     let finalResult = []
 
-    userPrefLang =  !_.isUndefined(req.get('x-preferred-language')) ?  req.get('x-preferred-language') : userPrefLang;
+    userPrefLangCode =  !_.isUndefined(req.get('x-preferred-language')) ?  req.get('x-preferred-language') : userPrefLang;
+    userPrefLang = langCodeMapping[userPrefLangCode];
     // If the request includes query String/ List
     const query =  req.body?.request?.query;
     if(query){
