@@ -152,8 +152,11 @@ const prepareQuery = (keywordArray) => {
                     url ILIKE '%%' || k || '%%'  OR
                     domain ILIKE '%%' || k || '%%'  OR
                     language::text ILIKE '%%' || k || '%%'  OR
-                    curricularGoal ILIKE '%%' || k || '%%' OR
+                    curriculargoal ILIKE '%%' || k || '%%' OR
                     category ILIKE '%%' || k || '%%' OR
+                    agegroup ILIKE '%%' || k || '%%' OR
+                    sourceorg ILIKE '%%' || k || '%%' OR
+                    learningoutcomes ILIKE '%%' || k || '%%' OR
                     array_to_string(audience, ' ') ILIKE '%%' || k || '%%' OR
                     array_to_string(keywords, ' ') ILIKE '%%' || k || '%%' OR
                     array_to_string(competencies, ' ') ILIKE '%%' || k || '%%'
