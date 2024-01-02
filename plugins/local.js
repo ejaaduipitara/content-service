@@ -2,14 +2,20 @@ const { Pool } = require('pg');
 const _ = require('lodash')
 const { logger } = require('../utils/logger');
 
-const pool = new Pool({
+let poolOptions = {
     user: process.env.POSTGRES_USERNAME,
     host: process.env.POSTGRES_HOST,
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
-    port: process.env.POSTGRES_PORT,
-});
-const tableName = 'djp_contents'
+    port: process.env.POSTGRES_PORT
+}
+
+if(process.env.SSL_ENABLED){
+    poolOptions.ssl = { rejectUnauthorized: false }
+}
+
+const pool = new Pool(poolOptions);
+const tableName = process.env.TABLE_NAME || 'djp_contents'
 const status = 'Live';
 let userPrefLangCode = 'hi';
 let userPrefLang = 'Hindi';
