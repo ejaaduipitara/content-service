@@ -10,7 +10,7 @@ let poolOptions = {
     port: process.env.POSTGRES_PORT
 }
 
-if(process.env.SSL_ENABLED){
+if((process.env.SSL_ENABLED).toLowerCase() === 'true'){
     poolOptions.ssl = { rejectUnauthorized: false }
 }
 
