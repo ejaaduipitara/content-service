@@ -41,7 +41,11 @@ const localContents = async (req, res) => {
     if(query){
         let keywordArray = query;
         if(_.isObject(query)){
-            keywordArray= _.uniq(_.flatten(_.values(query)))
+            if(query.hasOwnProperty('keywords')) {
+                keywordArray = _.uniq(query['keywords'])
+            } else {
+                keywordArray= _.uniq(_.flatten(_.values(query)))
+            }
             if(_.isString(keywordArray)){
                 keywordArray = [keywordArray]
             }
