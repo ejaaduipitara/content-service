@@ -7,7 +7,7 @@ CREATE TABLE djp_contents (
   description      TEXT,
   mimeType         VARCHAR(255),
   url              VARCHAR(255),
-  media            TEXT[],
+  media            JSONB,
   agegroup         VARCHAR(255),
   domain           VARCHAR(255),
   curriculargoal   VARCHAR(500),
