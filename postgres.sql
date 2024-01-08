@@ -18,7 +18,7 @@ CREATE TABLE djp_contents (
   audience          TEXT[],
   keywords         TEXT[],
   status           statusEnum,
-  learningoutcomes VARCHAR(500),
+  learningoutcomes TEXT,
   createdon        TIMESTAMP,
   lastupdatedon    TIMESTAMP
 );
