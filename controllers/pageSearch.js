@@ -1,8 +1,11 @@
 const { localContents } = require('../plugins/local');
 const { ResponseHandler } = require('../utils/ResponseHandler');
 const { logger } = require('../utils/logger')
+const axios =  require("axios");
+const _ = require('lodash')
 
-const PageSearch = (req, res) => {
+const configUrl = process.env.CONFIG_URL
+const PageSearch = async (req, res) => {
     const deviceId =  req.get('x-device-id')
     if(!deviceId){
         logger.warn('PageSearch: x-device-id is requird in headers deviceId: ', deviceId);
@@ -18,6 +21,17 @@ const PageSearch = (req, res) => {
             err: "ERR_BAD_REQUEST",
             errmsg: "pageId is requird"
         }, 400);
+    }
+
+    if(configUrl){
+        const response = await axios.get(configUrl)
+        if(response?.data?.pageConfig){
+            const config = response.data.pageConfig;
+            const pageDetails = _.find(config, { 'pageId': pageId});
+            if(!req.body?.request?.filters && pageDetails?.defaultFilter?.filters){
+                req.body.request.filters = pageDetails.defaultFilter.filters
+            }
+        }
     }
 
     localContents(req, res).then((result) => {
