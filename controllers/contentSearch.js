@@ -13,7 +13,7 @@ const ContentSearch = (req, res) => {
         }, 400);
     }
 
-    localContents(req, res).then((result) => {
+    localContents(req, res, 'searchAPI').then((result) => {
         logger.info(`local contents successfully: `, result);
         ResponseHandler.success(req, res, result)
     }).catch(error => {

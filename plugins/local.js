@@ -30,7 +30,7 @@ let langCodeMapping = {
     "ml": "Malayalam"
 }
 
-const localContents = async (req, res) => {
+const localContents = async (req, res, from) => {
 
     let finalResult = []
 
@@ -52,7 +52,7 @@ const localContents = async (req, res) => {
         } else if(_.isString(query)){
             keywordArray = [query]
         }
-        const queryString = prepareQuery(keywordArray)
+        const queryString = prepareQuery(keywordArray, from)
         const values = keywordArray;
         try{
             const result = await pool.query(queryString, values);
@@ -69,7 +69,7 @@ const localContents = async (req, res) => {
     // If the request includes filters
     const filters = req.body?.request?.filters;
     if(filters){
-        const queryString = findBasedOnFilters(filters)
+        const queryString = findBasedOnFilters(filters, undefined, ['audience', 'keywords', 'competencies'])
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
@@ -130,13 +130,17 @@ const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
             }
         })
         .join(' AND ');
-
+        
     const query = {
         text: `SELECT * FROM ${tableName} WHERE ${whereClause} AND status='${status}' ORDER BY
             CASE
                 WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
                 WHEN LOWER(language::text) = LOWER('English') THEN 3
                 ELSE 1
+            END DESC,
+            CASE
+                WHEN mimetype = 'video/x-youtube' THEN 10
+                ELSE 6
             END DESC;`,
         values: [...values],
     };
@@ -144,9 +148,35 @@ const findBasedOnFilters = (conditions, jsonbType = [], arrayType = []) => {
     return query;
 };
 
-const prepareQuery = (keywordArray) => {
+const prepareQuery = (keywordArray, from) => {
     let query;
-    if(!_.isUndefined(keywordArray)){
+    if(!_.isUndefined(keywordArray) && !_.isUndefined(from)){
+        query = `SELECT * FROM ${tableName}
+            WHERE status = '${status}' AND (
+                ${keywordArray.map((keyword, index) => {
+                return `EXISTS (
+                    SELECT 1
+                    FROM regexp_split_to_table($${index + 1}, ' ') AS k
+                    WHERE
+                    name ILIKE '%%' || k || '%%' OR
+                    domain ILIKE '%%' || k || '%%'  OR
+                    curriculargoal ILIKE '%%' || k || '%%' OR
+                    array_to_string(audience, ' ') ILIKE '%%' || k || '%%' OR
+                    array_to_string(keywords, ' ') ILIKE '%%' || k || '%%'
+                )`;
+                }).join(' OR ')}
+            )
+            ORDER BY
+                CASE
+                    WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
+                    WHEN LOWER(language::text) = LOWER('English') THEN 3
+                    ELSE 1
+                END DESC,
+                CASE
+                    WHEN mimetype = 'video/x-youtube' THEN 10
+                    ELSE 6
+                END DESC;`;
+    } else if(!_.isUndefined(keywordArray)){
         query = `SELECT * FROM ${tableName}
             WHERE status = '${status}' AND (
                 ${keywordArray.map((keyword, index) => {
@@ -158,7 +188,7 @@ const prepareQuery = (keywordArray) => {
                     name ILIKE '%%' || k || '%%' OR
                     thumbnail ILIKE '%%' || k || '%%'  OR
                     description ILIKE '%%' || k || '%%' OR
-                    mimeType ILIKE '%%' || k || '%%' OR
+                    mimetype ILIKE '%%' || k || '%%' OR
                     url ILIKE '%%' || k || '%%'  OR
                     domain ILIKE '%%' || k || '%%'  OR
                     language::text ILIKE '%%' || k || '%%'  OR
@@ -178,6 +208,10 @@ const prepareQuery = (keywordArray) => {
                     WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
                     WHEN LOWER(language::text) = LOWER('English') THEN 3
                     ELSE 1
+                END DESC,
+                CASE
+                    WHEN mimetype = 'video/x-youtube' THEN 10
+                    ELSE 6
                 END DESC;`;
     } else {
         query = `SELECT * FROM ${tableName} WHERE status='${status}' 
@@ -186,6 +220,10 @@ const prepareQuery = (keywordArray) => {
                 WHEN LOWER(language::text) = LOWER('${userPrefLang}') THEN 5
                 WHEN LOWER(language::text) = LOWER('English') THEN 3
                 ELSE 1
+            END DESC,
+            CASE
+                WHEN mimetype = 'video/x-youtube' THEN 10
+                ELSE 6
             END DESC;`
     }
     return query;
