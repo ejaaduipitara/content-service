@@ -161,6 +161,7 @@ const prepareQuery = (keywordArray, from) => {
                     name ILIKE '%%' || k || '%%' OR
                     domain ILIKE '%%' || k || '%%'  OR
                     curriculargoal ILIKE '%%' || k || '%%' OR
+                    sourceorg ILIKE '%%' || k || '%%' OR
                     array_to_string(audience, ' ') ILIKE '%%' || k || '%%' OR
                     array_to_string(keywords, ' ') ILIKE '%%' || k || '%%'
                 )`;
