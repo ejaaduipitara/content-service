@@ -27,7 +27,12 @@ let langCodeMapping = {
     "ta": "Tamil",
     "as": "Assamese",
     "pa": "Punjabi",
-    "ml": "Malayalam"
+    "ml": "Malayalam",
+    "kn": "Kannada",
+    "bn": "Bengali",
+    "gu": "Gujarati",
+    "mr": "Marathi",
+    "ur": "Urdu"
 }
 
 const localContents = async (req, res, from) => {
