@@ -22,3 +22,6 @@ CREATE TABLE djp_contents (
   createdon        TIMESTAMP,
   lastupdatedon    TIMESTAMP
 );
+
+ALTER TYPE enum_type ADD VALUE 'new_value';
+
