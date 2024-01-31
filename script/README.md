@@ -1,6 +1,6 @@
-# DJP Content Preparation Script
+# Content Preparation Script
 
-DJP Content Service provides content details for the DJP Mobile App to access and play. The content metadata and source links (URLs) are stored in a database from which the Content Service provides the details.
+Content Service provides content details for the Mobile App to access and play. The content metadata and source links (URLs) are stored in a database from which the Content Service provides the details.
 
 To upload content details to the database, following is the process:
 1. Get the content details in a CSV file
@@ -9,7 +9,7 @@ To upload content details to the database, following is the process:
 4. Import the output csv to database
 
 ## Step 1: Get the content details in a CSV file
-The content will need to be shared in the following format: [Click Here](https://raw.githubusercontent.com/DJP-Digital-Jaaduii-Pitara/djp-devops/release-1.0.0/scripts/script-djp/sample-csv/input-file.csv)
+The content will need to be shared in the following format: [Click Here](https://raw.githubusercontent.com/Sunbird-AIAssistant/content-service/main/script/sample-csv/input-file.csv)
 
 Make sure the input csv is in the required format
 
@@ -34,7 +34,7 @@ Make sure the input csv is in the required format
 	sample: 
 	mvn exec:java -Dexec.mainClass="com.script.djp.script_djp.App" -Dexec.args="/Users/Documents/input-fiel.csv /Users/Documents/output-fiel.csv"
 	```
-3. The output will be in the following format: [Click Here](https://raw.githubusercontent.com/DJP-Digital-Jaaduii-Pitara/djp-devops/release-1.0.0/scripts/script-djp/sample-csv/output-file.csv)
+3. The output will be in the following format: [Click Here](https://raw.githubusercontent.com/Sunbird-AIAssistant/content-service/main/script/sample-csv/output-file.csv)
 
 ## 4: Import the final CSV to database
 Log in to the PostgreSQL instance for the contentdb database using the psql client as the admin user, and execute the following command to import data.
