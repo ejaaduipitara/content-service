@@ -1,0 +1,165 @@
+{
+    "pageConfig": [
+        {
+            "pageId": "djp.app.home",
+            "defaultFilter": {
+                "id": "all",
+                "label": "All",
+                "query": "",
+                "filters": {
+                    "mimeType": [
+                        "video/mp4",
+                        "audio/mp3",
+                        "video/x-youtube"
+                    ]
+                }
+            },
+            "additionalFilters": [
+                {
+                    "id": "activity",
+                    "label": "Activities",
+                    "query": "",
+                    "filters": {
+                        "category": "Activities"
+                    },
+                    "index": 1
+                },
+                {
+                    "id": "stories",
+                    "label": "Stories",
+                    "query": "",
+                    "filters": {
+                        "category": "Stories"
+                    },
+                    "index": 2
+                },
+                {
+                    "id": "rhymes",
+                    "label": "Rhymes",
+                    "query": "",
+                    "filters": {
+                        "category": "Rhymes / Lullabies"
+                    },
+                    "index": 3
+                },
+                {
+                    "id": "songs",
+                    "label": "Songs",
+                    "query": "",
+                    "filters": {
+                        "category": "Songs"
+                    },
+                    "index": 4
+                },
+                {
+                    "id": "for_teachers",
+                    "label": "For Teachers",
+                    "query": "",
+                    "filters": {
+                        "audience": ["Teacher"]
+                    },
+                    "index": 5
+                },
+                {
+                    "id": "puzzles",
+                    "label": "Puzzles",
+                    "query": "Riddles",
+                    "filters": {
+                        "category": [
+                            "Puzzles",
+                            "Riddles"
+                        ]
+                    },
+                    "index": 6
+                },
+                {
+                    "id": "cards",
+                    "label": "Cards",
+                    "query": "",
+                    "filters": {
+                        "category": "Cards"
+                    },
+                    "index": 7
+                },
+                {
+                    "id": "audio_books",
+                    "label": "Audio Books",
+                    "query": "",
+                    "filters": {
+                        "category": "Audio Books"
+                    },
+                    "index": 8
+                },
+                {
+                    "id": "toys_and_games",
+                    "label": "Toys and Games",
+                    "query": "",
+                    "filters": {
+                        "category": "Toys and Games"
+                    },
+                    "index": 9
+                },
+                {
+                    "id": "handbooks",
+                    "label": "Handbooks",
+                    "query": "Handbooks",
+                    "filters": {
+                        "category": [
+                            "Handbooks for parents",
+                            "Handbooks for teachers and trainers"
+                        ]
+                    },
+                    "index": 10
+                },
+                {
+                    "id": "charts",
+                    "label": "Charts",
+                    "query": "",
+                    "filters": {
+                        "category": "Charts"
+                    },
+                    "index": 11
+                }
+            ]
+        }
+    ],
+    "languages": [
+        {
+            "id": "hi",
+            "label": "हिंदी",
+            "default": true
+        },
+        {
+            "id": "en",
+            "label": "English"
+        },
+        {
+            "id": "te",
+            "label": "తెలుగు"
+        },
+        {
+            "id": "or",
+            "label": "ଓଡିଆ"
+        },
+        {
+            "id": "ta",
+            "label": "தமிழ்"
+        },
+        {
+            "id": "as",
+            "label": "অসমীয়া"
+        },
+        {
+            "id": "pa",
+            "label": "ਪੰਜਾਬੀ"
+        },
+        {
+            "id": "ml",
+            "label": "മലയാളം"
+        },
+        {
+            "id": "kn",
+            "label": "ಕನ್ನಡ"
+        }
+    ]
+}
