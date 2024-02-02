@@ -29,10 +29,10 @@ Make sure the input csv is in the required format
     - For executing:
 
 	```
-	mvn exec:java -Dexec.mainClass="com.script.djp.script_djp.App" -Dexec.args="<local path for input-file.csv> <local path for output-file.csv>"
+	mvn exec:java -Dexec.mainClass="com.script.main.App" -Dexec.args="<local path for input-file.csv> <local path for output-file.csv>"
 
 	sample: 
-	mvn exec:java -Dexec.mainClass="com.script.djp.script_djp.App" -Dexec.args="/Users/Documents/input-fiel.csv /Users/Documents/output-fiel.csv"
+	mvn exec:java -Dexec.mainClass="com.script.main.App" -Dexec.args="/Users/Documents/input-fiel.csv /Users/Documents/output-fiel.csv"
 	```
 3. The output will be in the following format: [Click Here](https://raw.githubusercontent.com/Sunbird-AIAssistant/content-service/main/script/sample-csv/output-file.csv)
 

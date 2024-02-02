@@ -1,4 +1,4 @@
-package com.script.djp.script_djp;
+package com.script.main;
 
 import java.util.List;
 import java.util.Map;
