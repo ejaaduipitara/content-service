@@ -1,4 +1,4 @@
-package com.script.djp.script_djp;
+package com.script.main;
 
 import static org.junit.Assert.assertTrue;
 

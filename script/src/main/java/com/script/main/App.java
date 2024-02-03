@@ -1,5 +1,6 @@
-package com.script.djp.script_djp;
+package com.script.main;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +17,8 @@ public class App
         System.out.println( "Script Execution Started!!" );
         try {
         	
-			//String inputFilePath = "/Users/NIIT/Documents/important/final-diksha-youtube-data.csv";
-			//String outputFilePath = "/Users/NIIT/Documents/important/final-diksha-youtube-data-output-file-new.csv";
+			//String inputFilePath = "/Documents/important/input-file.csv";
+			//String outputFilePath = "/Documents/important/output-file.csv";
         	
         	String inputFilePath = args[0];
 			String outputFilePath = args[1];
@@ -27,11 +28,12 @@ public class App
 				List<Map<String, Object>> youtubeContentList = (List<Map<String, Object>>)contentListObjects.get("youtube");
 				System.out.println("**********Diksha Content List********** ::" + dikshaContentList);
 				System.out.println("**********Youtube Content List********** ::" + youtubeContentList);
+				List<Object> dikshaContentObjectList = new ArrayList<Object>();
 				if(!dikshaContentList.isEmpty()) {
-					List<Object> dikshaContentObjectList = ReadDikshaData.readData(dikshaContentList);
-					if(!dikshaContentObjectList.isEmpty()) {
-						CsvWriter.writeData(dikshaContentObjectList, youtubeContentList, outputFilePath);
-					}
+					dikshaContentObjectList = ReadDikshaData.readData(dikshaContentList);
+				}
+				if(!dikshaContentObjectList.isEmpty() || !youtubeContentList.isEmpty()) {
+					CsvWriter.writeData(dikshaContentObjectList, youtubeContentList, outputFilePath);
 				}
 					
 			}

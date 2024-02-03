@@ -4,13 +4,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.script.djp</groupId>
-  <artifactId>script-djp</artifactId>
+  <groupId>com.script.main</groupId>
+  <artifactId>ai-assistant-content-service</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-
-  <name>script-djp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <name>content-service</name>
+  
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -98,7 +96,7 @@
 	        <archive>
 	          <manifest>
 	            <addClasspath>true</addClasspath>
-	            <mainClass>com.script.djp.script_djp.App</mainClass>
+	            <mainClass>com.script.main.App</mainClass>
 	          </manifest>
 	        </archive>
 	      </configuration>
