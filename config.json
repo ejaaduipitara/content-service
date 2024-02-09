@@ -119,6 +119,15 @@
                         "category": "Charts"
                     },
                     "index": 11
+                },
+                {
+                    "id": "jaadui_pitara_box",
+                    "label": "Jaadui Pitara Box",
+                    "query": "",
+                    "filters": {
+                        "category": "Jaadui Pitara Box"
+                    },
+                    "index": 12
                 }
             ]
         }
