@@ -23,5 +23,4 @@ CREATE TABLE djp_contents (
   lastupdatedon    TIMESTAMP
 );
 
-ALTER TYPE enum_type ADD VALUE 'new_value';
-
+ALTER TYPE languageEnum ADD VALUE 'Khasi';
