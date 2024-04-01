@@ -2,7 +2,7 @@
 The Content Service provides the capability to store and retrieve metadata and links to the list of contents shown in the Mobile app of AI Assistant. It also provides the capability to store and retrieve the app configurations.
 
 # Prerequisites
-* NodeJs
+* NodeJs 14+
 * PostgreSQL
 
 # Installation
