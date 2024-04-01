@@ -32,8 +32,9 @@ The Content Service provides the capability to store and retrieve metadata and l
    SSL_ENABLED= true # true or false
    TABLE_NAME= # postgresql table name
    ```
-6. Run `npm install` to install node modules
-7. Run `node app.js`
+6. [click here](https://github.com/Sunbird-AIAssistant/content-service/blob/main/postgres.sql) and RUN scripts in PostgreSQL to create tables.
+7. Run `npm install` to install node modules
+8. Run `node app.js`
 
 # API Specification and Documentation
 ### Content search
