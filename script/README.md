@@ -17,7 +17,7 @@ Make sure the input csv is in the required format
 1. Add a new column as third column with name "identifier) (in the first row).
 2. Add the following formula to all the rows in that column:
 ```
-=IF(ISNUMBER(SEARCH("v=", B3)), MID(B3, SEARCH("v=", B3)+2, 11), IF(ISNUMBER(FIND(".be/", B3)), MID(B3, FIND(".be/", B3)+4, 11), IF(ISNUMBER(FIND("/shorts/", B3)), MID(B3, FIND("/shorts/", B3)+LEN("/shorts/"), 11), IF(ISNUMBER(FIND("youtu.be/", B3)), MID(B3, FIND("youtu.be/", B3)+LEN("youtu.be/"), 11), ""))))
+=IF(ISNUMBER(SEARCH("v=", B2)), MID(B2, SEARCH("v=", B2)+2, 11), IF(ISNUMBER(FIND(".be/", B2)), MID(B2, FIND(".be/", B2)+4, 11), IF(ISNUMBER(FIND("/shorts/", B2)), MID(B2, FIND("/shorts/", B2)+LEN("/shorts/"), 11), IF(ISNUMBER(FIND("youtu.be/", B2)), MID(B2, FIND("youtu.be/", B2)+LEN("youtu.be/"), 11), ""))))
 ```
 3. The above will extract the youtube content id from the given URL and populate it in the column.
 
