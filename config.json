@@ -52,17 +52,8 @@
                     "index": 4
                 },
                 {
-                    "id": "for_teachers",
-                    "label": "For Teachers",
-                    "query": "",
-                    "filters": {
-                        "audience": ["Teacher"]
-                    },
-                    "index": 5
-                },
-                {
                     "id": "puzzles",
-                    "label": "Puzzles",
+                    "label": "Riddles",
                     "query": "Riddles",
                     "filters": {
                         "category": [
@@ -70,64 +61,16 @@
                             "Riddles"
                         ]
                     },
-                    "index": 6
-                },
-                {
-                    "id": "cards",
-                    "label": "Cards",
-                    "query": "",
-                    "filters": {
-                        "category": "Cards"
-                    },
-                    "index": 7
-                },
-                {
-                    "id": "audio_books",
-                    "label": "Audio Books",
-                    "query": "",
-                    "filters": {
-                        "category": "Audio Books"
-                    },
-                    "index": 8
-                },
-                {
-                    "id": "toys_and_games",
-                    "label": "Toys and Games",
-                    "query": "",
-                    "filters": {
-                        "category": "Toys and Games"
-                    },
-                    "index": 9
-                },
-                {
-                    "id": "handbooks",
-                    "label": "Handbooks",
-                    "query": "Handbooks",
-                    "filters": {
-                        "category": [
-                            "Handbooks for parents",
-                            "Handbooks for teachers and trainers"
-                        ]
-                    },
-                    "index": 10
-                },
-                {
-                    "id": "charts",
-                    "label": "Charts",
-                    "query": "",
-                    "filters": {
-                        "category": "Charts"
-                    },
-                    "index": 11
+                    "index": 5
                 },
                 {
                     "id": "jaadui_pitara_box",
-                    "label": "Jaadui Pitara Box",
+                    "label": "Jaadui Pitara",
                     "query": "",
                     "filters": {
-                        "category": "Jaadui Pitara Box"
+                        "category": "Jaadui Pitara"
                     },
-                    "index": 12
+                    "index": 6
                 }
             ]
         }
