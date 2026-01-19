@@ -58,7 +58,11 @@ const localContents = async (req, res, from) => {
             keywordArray = [query]
         }
         const queryString = prepareQuery(keywordArray, from)
+        logger.info(`Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.debug(`Executing content search with query: ${JSON.stringify(queryString)}`);
         const values = keywordArray;
+        logger.info(`Values for query execution: ${JSON.stringify(values)}`);
+        logger.debug(`Values for query execution: ${JSON.stringify(values)}`);
         try{
             const result = await pool.query(queryString, values);
             finalResult = _.concat(finalResult, result.rows)
@@ -75,6 +79,8 @@ const localContents = async (req, res, from) => {
     const filters = req.body?.request?.filters;
     if(filters){
         const queryString = findBasedOnFilters(filters, undefined, ['audience', 'keywords', 'competencies'])
+        logger.info(`Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.debug(`Executing content search with query: ${JSON.stringify(queryString)}`);
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
@@ -90,6 +96,8 @@ const localContents = async (req, res, from) => {
     // If the request does not include either a query or filters
     if(!query && !filters){
         const queryString = prepareQuery()
+        logger.info(`Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.debug(`Executing content search with query: ${JSON.stringify(queryString)}`);
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
