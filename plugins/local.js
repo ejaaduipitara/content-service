@@ -43,6 +43,9 @@ const localContents = async (req, res, from) => {
     userPrefLang = langCodeMapping[userPrefLangCode];
     // If the request includes query String/ List
     const query =  req.body?.request?.query;
+    console.log(`Received query: ${JSON.stringify(query)}`);
+    logger.warn(`warn Received query: ${JSON.stringify(query)}`);
+    logger.info(`info Received query: ${JSON.stringify(query)}`);
     if(query){
         let keywordArray = query;
         if(_.isObject(query)){
@@ -58,7 +61,13 @@ const localContents = async (req, res, from) => {
             keywordArray = [query]
         }
         const queryString = prepareQuery(keywordArray, from)
+        console.log(`Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.info(`info Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.warn(`warn Executing content search with query: ${JSON.stringify(queryString)}`);
         const values = keywordArray;
+        console.log(`Values for query execution: ${JSON.stringify(values)}`);
+        logger.info(`Values for query execution: ${JSON.stringify(values)}`);
+        logger.warn(`Values for query execution: ${JSON.stringify(values)}`);
         try{
             const result = await pool.query(queryString, values);
             finalResult = _.concat(finalResult, result.rows)
@@ -75,6 +84,9 @@ const localContents = async (req, res, from) => {
     const filters = req.body?.request?.filters;
     if(filters){
         const queryString = findBasedOnFilters(filters, undefined, ['audience', 'keywords', 'competencies'])
+        console.log(`Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.info(`info Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.warn(`warn Executing content search with query: ${JSON.stringify(queryString)}`);
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
@@ -90,6 +102,9 @@ const localContents = async (req, res, from) => {
     // If the request does not include either a query or filters
     if(!query && !filters){
         const queryString = prepareQuery()
+        console.log(`Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.info(`info Executing content search with query: ${JSON.stringify(queryString)}`);
+        logger.warn(`warn Executing content search with query: ${JSON.stringify(queryString)}`);
         try{
             const result = await pool.query(queryString);
             finalResult = _.concat(finalResult, result.rows)
